@@ -1,2 +1,3 @@
-def main() -> None:
-    print("Hello from semantic-note-evaluator!")
+from semantic_note_evaluator.main import app, main
+
+__all__ = ["app", "main"]
