@@ -2,10 +2,12 @@ from typing import Annotated
 
 from fastapi import Depends
 
+from semantic_note_evaluator.clients.groq_client import GroqClient
 from semantic_note_evaluator.repositories.in_memory_note_repository import (
     InMemoryNoteRepository,
 )
 from semantic_note_evaluator.services.retrieval_service import RetrievalService
+from semantic_note_evaluator.settings import get_settings
 
 _note_repository: InMemoryNoteRepository | None = None
 _retrieval_service: RetrievalService | None = None
@@ -25,3 +27,8 @@ def get_retrieval_service(
     if _retrieval_service is None:
         _retrieval_service = RetrievalService(repository=repo)
     return _retrieval_service
+
+
+def get_llm_client() -> GroqClient:
+    settings = get_settings()
+    return GroqClient(api_key=settings.groq_api_key)
