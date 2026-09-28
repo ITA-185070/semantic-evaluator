@@ -5,6 +5,7 @@ from fastapi import Depends, FastAPI
 
 from semantic_note_evaluator.clients.groq_client import GroqClient
 from semantic_note_evaluator.dependencies import get_llm_client, get_retrieval_service
+from semantic_note_evaluator.prompts import SYSTEM_PROMPT
 from semantic_note_evaluator.schemas.evaluation import (
     EVALUATION_RESPONSE_FORMAT,
     EvaluationResult,
@@ -17,23 +18,6 @@ app = FastAPI(
     title="Semantic Note Evaluator",
     version="0.1.0",
 )
-
-SYSTEM_PROMPT = """\
-You are a rigorous, supportive Cognitive Gatekeeper that evaluates \
-personal study notes using the Feynman Technique.
-
-Instructions:
-1. Identify jargon used as a crutch — technical terms the author drops without \
-explaining the underlying mechanism in plain words.
-2. For suggested_links, ONLY reference notes whose EXACT title appears in the \
-provided context. NEVER invent or hallucinate note titles.
-3. Write one penetrating challenge_question targeting an edge case, failure mode, \
-or physical constraint the note ignores.
-4. Set status to "passed" only if the note explains mechanisms in plain language \
-with minimal unexplained jargon. Otherwise set "flagged".
-5. Keep summary_critique to 2-3 sentences: acknowledge strengths, then identify \
-the primary conceptual gap.\
-"""
 
 
 @app.get("/health")
