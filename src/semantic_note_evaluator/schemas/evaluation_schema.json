@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EvaluationResult",
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["passed", "flagged"],
+      "description": "Set to 'passed' ONLY if the note explains the underlying mechanisms in plain words with minimal jargon. Set to 'flagged' if the author uses technical terms without explaining how they work, hand-waves over crucial steps, or has logical gaps."
+    },
+    "summary_critique": {
+      "type": "string",
+      "description": "A concise 2-3 sentence Feynman-style assessment. Acknowledge what the note explains well, then identify the primary conceptual illusion or missing mechanism."
+    },
+    "jargon_flags": {
+      "type": "array",
+      "description": "Technical terms used as crutches without mechanistic understanding.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "term": {
+            "type": "string",
+            "description": "The exact technical buzzword, acronym, or abstraction used as a substitute for explaining what is physically happening."
+          },
+          "critique": {
+            "type": "string",
+            "description": "Direct explanation of what mechanical detail was skipped and what needs plain-English clarification."
+          }
+        },
+        "required": ["term", "critique"],
+        "additionalProperties": false
+      }
+    },
+    "suggested_links": {
+      "type": "array",
+      "description": "Grounded bidirectional links to reference notes from the retrieved context.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "note_title": {
+            "type": "string",
+            "description": "The EXACT title of an existing note from the provided reference context. You must ONLY pick from the provided context. NEVER invent or hallucinate titles not present in the context."
+          },
+          "reason": {
+            "type": "string",
+            "description": "A 1-2 sentence explanation of the specific conceptual bridge connecting the two notes."
+          }
+        },
+        "required": ["note_title", "reason"],
+        "additionalProperties": false
+      }
+    },
+    "challenge_question": {
+      "type": "string",
+      "description": "A single penetrating question targeting an edge case, failure mode, or physical constraint. Avoid superficial definition questions."
+    }
+  },
+  "required": [
+    "status",
+    "summary_critique",
+    "jargon_flags",
+    "suggested_links",
+    "challenge_question"
+  ],
+  "additionalProperties": false
+}
