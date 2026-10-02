@@ -123,6 +123,7 @@ src/semantic_note_evaluator/
 ├── repositories/
 │   └── in_memory_note_repository.py  # Seed knowledge base (9 LLM-domain notes)
 ├── services/
+│   ├── evaluation_service.py # Orchestrates RAG context, prompt, LLM call, and validation
 │   └── retrieval_service.py  # Cosine similarity retrieval with NoteSource protocol
 ├── clients/
 │   └── groq_client.py       # Async Groq API wrapper
@@ -140,13 +141,7 @@ src/semantic_note_evaluator/
 |---|---|---|
 | `PORT` | Server port | `8100` |
 | `GROQ_API_KEY` | Groq API key for LLM inference | *required* |
-
-## Key Design Decisions
-
-- **JSON Schema as Single Source of Truth** — The LLM response contract lives in [`evaluation_schema.json`](src/semantic_note_evaluator/schemas/evaluation_schema.json). Both the Groq constrained decoding and the Pydantic DTOs derive from this file.
-- **Consumer-Driven Contracts** — `RetrievalService` depends on a `NoteSource(Protocol)`, not on `InMemoryNoteRepository` directly. The repository can be swapped to a vector database without touching the service.
-- **Prompt as Declarative Asset** — The system prompt lives in a standalone [markdown file](src/semantic_note_evaluator/prompts/evaluate_system.md), not inline in Python code.
-- **No Abstract Interfaces for Clients** — `GroqClient` is a concrete class. Adding a `Protocol` for LLM providers is deferred until a second provider (e.g., Ollama) is actually needed.
+| `LLM_MODEL` | Groq model identifier for evaluation | *required* |
 
 ## Tech Stack
 
