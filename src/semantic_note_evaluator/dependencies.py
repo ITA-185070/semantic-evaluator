@@ -6,6 +6,7 @@ from semantic_note_evaluator.clients.groq_client import GroqClient
 from semantic_note_evaluator.repositories.in_memory_note_repository import (
     InMemoryNoteRepository,
 )
+from semantic_note_evaluator.services.evaluation_service import EvaluationService
 from semantic_note_evaluator.services.retrieval_service import RetrievalService
 from semantic_note_evaluator.settings import get_settings
 
@@ -32,3 +33,10 @@ def get_retrieval_service(
 def get_llm_client() -> GroqClient:
     settings = get_settings()
     return GroqClient(api_key=settings.groq_api_key, model=settings.llm_model)
+
+
+def get_evaluation_service(
+    retrieval: Annotated[RetrievalService, Depends(get_retrieval_service)],
+    llm: Annotated[GroqClient, Depends(get_llm_client)],
+) -> EvaluationService:
+    return EvaluationService(retrieval_service=retrieval, llm_client=llm)
