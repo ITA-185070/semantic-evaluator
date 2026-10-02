@@ -2,14 +2,11 @@ from typing import Any
 
 from groq import AsyncGroq
 
-DEFAULT_MODEL: str = "llama-3.3-70b-versatile"
-
-
 class GroqClient:
     def __init__(
         self,
         api_key: str,
-        model: str = DEFAULT_MODEL,
+        model: str,
         client: AsyncGroq | None = None,
     ) -> None:
         self.model = model
@@ -21,6 +18,8 @@ class GroqClient:
         if self._client is None:
             if not self._api_key:
                 raise ValueError("GROQ_API_KEY is not configured")
+            if not self.model:
+                raise ValueError("LLM_MODEL is not configured")
             self._client = AsyncGroq(api_key=self._api_key)
         return self._client
 

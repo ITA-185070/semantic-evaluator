@@ -31,4 +31,4 @@ def get_retrieval_service(
 
 def get_llm_client() -> GroqClient:
     settings = get_settings()
-    return GroqClient(api_key=settings.groq_api_key)
+    return GroqClient(api_key=settings.groq_api_key, model=settings.llm_model)
